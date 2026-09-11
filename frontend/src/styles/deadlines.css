@@ -1,0 +1,20 @@
+.deadlines-page{}
+.deadlines-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:32px;flex-wrap:wrap}
+.deadlines-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.filter-btn{padding:7px 16px;border-radius:20px;font-size:.83rem;font-weight:600;border:1.5px solid var(--border);background:transparent;cursor:pointer;transition:var(--transition);color:var(--text-secondary)}
+.filter-btn:hover,.filter-btn.active{border-color:var(--primary);background:#EEF2FF;color:var(--primary)}
+.deadlines-list{display:flex;flex-direction:column;gap:12px}
+.deadline-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 22px;display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;align-items:center;transition:var(--transition);animation:fadeInUp .3s ease both}
+.deadline-card:hover{box-shadow:var(--shadow);transform:translateX(2px)}
+.deadline-card__bar{width:4px;height:48px;border-radius:2px;flex-shrink:0}
+.deadline-card__subject{font-weight:700;font-size:.95rem}
+.deadline-card__topic{font-size:.83rem;color:var(--text-secondary);margin-top:2px}
+.deadline-card__date{font-size:.82rem;color:var(--text-secondary);margin-top:4px;display:flex;align-items:center;gap:4px}
+.deadline-card__days{text-align:center;min-width:56px}
+.deadline-card__days-num{font-size:1.4rem;font-weight:800;line-height:1}
+.deadline-card__days-lbl{font-size:.72rem;color:var(--text-secondary)}
+.no-deadlines{text-align:center;padding:64px 24px;background:var(--bg-card);border:2px dashed var(--border);border-radius:var(--radius-xl)}
+.no-deadlines__icon{font-size:3rem;margin-bottom:16px}
+.no-deadlines__title{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.no-deadlines__desc{color:var(--text-secondary)}
+@media(max-width:600px){.deadline-card{grid-template-columns:auto 1fr auto}.deadline-card__days{display:none}}
