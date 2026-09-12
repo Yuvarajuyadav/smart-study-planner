@@ -41,3 +41,21 @@
 .toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;padding:12px 20px;border-radius:var(--radius);font-size:.88rem;font-weight:500;box-shadow:var(--shadow-lg);z-index:9999;animation:fadeInUp .3s ease both;display:flex;align-items:center;gap:8px}
 .toast.success{background:#16A34A}
 .toast.error{background:var(--danger)}
+
+/* Subjects — mobile */
+@media (max-width: 768px) {
+  .subjects-header { flex-direction: column; align-items: stretch; gap: 12px; }
+  .subjects-header > div:last-child { display: flex; flex-direction: column; gap: 8px; }
+  .subjects-header .btn { width: 100%; justify-content: center; }
+  .subjects-grid { grid-template-columns: 1fr; gap: 14px; }
+  .subject-card { padding: 18px; }
+  .modal { max-width: 100%; border-radius: var(--radius-lg) var(--radius-lg) 0 0; position: fixed; bottom: 0; left: 0; right: 0; max-height: 92vh; }
+  .modal-backdrop { align-items: flex-end; }
+  .modal__body { padding: 16px; }
+  .modal__footer { padding: 0 16px 16px; }
+  .modal__footer .btn { flex: 1; }
+}
+@media (max-width: 480px) {
+  .subject-card { padding: 14px; }
+  .subject-card__badges { gap: 4px; }
+}

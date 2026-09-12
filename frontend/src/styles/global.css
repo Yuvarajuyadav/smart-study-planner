@@ -35,3 +35,14 @@ a{color:inherit;text-decoration:none}ul,ol{list-style:none}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .fade-in-up{animation:fadeInUp .4s ease both}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+@media (max-width: 768px) {
+  .container { padding: 0 16px; }
+  .page-wrapper { padding-top: calc(var(--navbar-h) + 20px); padding-bottom: 40px; }
+  .section-title { font-size: 1.4rem; }
+  .section-subtitle { font-size: .9rem; margin-bottom: 20px; }
+}
+@media (max-width: 480px) {
+  .container { padding: 0 12px; }
+}

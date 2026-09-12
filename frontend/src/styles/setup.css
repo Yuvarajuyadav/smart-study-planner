@@ -28,3 +28,16 @@
 .form-submit-area .btn{flex:1;justify-content:center;padding:14px}
 .setup-existing-info{background:#EEF2FF;border:1px solid #C7D2FE;border-radius:var(--radius);padding:14px 18px;margin-bottom:24px;font-size:.9rem;color:var(--primary);display:flex;align-items:center;gap:10px}
 @media(max-width:480px){.time-options{grid-template-columns:1fr 1fr}.days-options{grid-template-columns:repeat(4,1fr)}}
+
+/* Setup — mobile */
+@media (max-width: 768px) {
+  .setup-card { padding: 24px 18px; }
+  .time-options { grid-template-columns: 1fr 1fr; }
+  .days-options { grid-template-columns: repeat(4,1fr); }
+  .form-submit-area .btn { padding: 12px; font-size: .9rem; }
+}
+@media (max-width: 480px) {
+  .setup-card { padding: 20px 14px; }
+  .time-options { grid-template-columns: 1fr; }
+  .days-options { grid-template-columns: repeat(4,1fr); }
+}

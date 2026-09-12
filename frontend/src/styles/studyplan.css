@@ -27,3 +27,18 @@
 .no-plan__desc{color:var(--text-secondary);margin-bottom:24px}
 .plan-progress-bar{height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden;margin-top:12px}
 .plan-progress-fill{height:100%;background:var(--success);border-radius:3px;transition:width .5s ease}
+
+/* Study Plan — mobile */
+@media (max-width: 768px) {
+  .studyplan-header { flex-direction: column; align-items: stretch; gap: 10px; }
+  .plan-meta-bar { grid-template-columns: repeat(2,1fr); gap: 10px; }
+  .task-card { grid-template-columns: 1fr; gap: 10px; padding: 14px; }
+  .task-card__time { display: flex; align-items: center; gap: 10px; text-align: left; }
+  .task-card__time-val { font-size: .8rem; }
+  .task-card__actions { flex-direction: row; justify-content: flex-end; }
+}
+@media (max-width: 480px) {
+  .plan-meta-bar { grid-template-columns: repeat(2,1fr); }
+  .plan-meta-card { padding: 12px; }
+  .plan-meta-card__val { font-size: 1.1rem; }
+}

@@ -49,3 +49,33 @@
 .cta-card{background:var(--primary);border-radius:var(--radius-xl);padding:64px 40px;color:#fff;max-width:800px;margin:0 auto}
 .cta-card h2{font-size:2rem;font-weight:800;margin-bottom:16px}
 .cta-card p{opacity:.85;margin-bottom:32px;font-size:1.05rem}
+
+/* Home — mobile */
+@media (max-width: 768px) {
+  .hero { padding: 40px 0 32px; }
+  .hero__title { font-size: 2rem; }
+  .hero__subtitle { font-size: .95rem; }
+  .hero__actions { gap: 10px; }
+  .hero__actions .btn { width: 100%; justify-content: center; }
+  .hero__dashboard { padding: 16px; }
+  .hero__db-grid { grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .hero__db-stat-val { font-size: 1.1rem; }
+  .features-section { padding: 40px 0; }
+  .features-grid { grid-template-columns: 1fr; gap: 16px; }
+  .feature-card { padding: 20px; }
+  .stats-band { padding: 32px 0; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); gap: 16px; }
+  .stat-val { font-size: 1.8rem; }
+  .how-section { padding: 40px 0; }
+  .steps-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .cta-section { padding: 40px 0; }
+  .cta-card { padding: 40px 20px; }
+  .cta-card h2 { font-size: 1.5rem; }
+}
+@media (max-width: 480px) {
+  .hero__db-grid { grid-template-columns: repeat(3,1fr); gap: 4px; }
+  .hero__db-stat { padding: 10px 6px; }
+  .hero__db-task { padding: 10px 12px; gap: 8px; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+}
