@@ -139,7 +139,6 @@ export default function Subjects() {
       const result = await fetchSubjects()
       setSubjects(result.subjects)
       setSource(result.source)
-      if (result.source === 'local') showToast('Showing cached data (server offline)', 'error')
       setLoading(false)
     })()
   }, [])
@@ -183,9 +182,7 @@ export default function Subjects() {
             <h1 className="section-title">My Subjects</h1>
             <div className="subjects-count">
               {subjects.length} subject{subjects.length !== 1 ? 's' : ''} added
-              {source === 'api' && <span style={{ marginLeft: 8, color: 'var(--success)', fontSize: '.78rem', fontWeight: 600 }}>● Live</span>}
-              {source === 'local' && <span style={{ marginLeft: 8, color: 'var(--warning)', fontSize: '.78rem', fontWeight: 600 }}>● Offline cache</span>}
-            </div>
+              </div>
           </div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             {subjects.length > 0 && <button className="btn btn-outline" onClick={() => navigate('/study-plan')}>📋 View Study Plan</button>}

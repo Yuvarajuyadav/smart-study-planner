@@ -62,9 +62,7 @@ export default function Deadlines() {
             <p className="section-subtitle">
               {overdue > 0 && <span style={{ color: 'var(--danger)', fontWeight: 600 }}>⚠ {overdue} overdue · </span>}
               {thisWeek} deadline{thisWeek !== 1 ? 's' : ''} this week
-              {source === 'api'   && <span style={{ marginLeft: 8, color: 'var(--success)',  fontSize: '.78rem', fontWeight: 600 }}>● Live</span>}
-              {source === 'local' && <span style={{ marginLeft: 8, color: 'var(--warning)', fontSize: '.78rem', fontWeight: 600 }}>● Offline</span>}
-            </p>
+              </p>
           </div>
           <button className="btn btn-outline btn-sm" onClick={() => navigate('/subjects')}>+ Add Subjects</button>
         </div>

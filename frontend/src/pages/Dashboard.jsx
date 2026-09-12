@@ -21,11 +21,9 @@ export default function Dashboard() {
       const apiData = await fetchDashboard()
 
       if (apiData && apiData.success) {
-        setSource('api')
         setData(apiData)
       } else {
         // Local fallback
-        setSource('local')
         const subjects  = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
         const setup     = getLocalSetup()
         const completed = JSON.parse(localStorage.getItem(COMPLETED_KEY) || '{}')
@@ -74,9 +72,7 @@ export default function Dashboard() {
           <h1 className="section-title">Dashboard</h1>
           <p className="section-subtitle">
             {setup ? `Welcome back, ${setup.studentName}! Here's your progress overview.` : 'Overview of your study progress.'}
-            {source === 'api'   && <span style={{ marginLeft: 8, color: 'var(--success)',  fontSize: '.78rem', fontWeight: 600 }}>● Live</span>}
-            {source === 'local' && <span style={{ marginLeft: 8, color: 'var(--warning)', fontSize: '.78rem', fontWeight: 600 }}>● Offline cache</span>}
-          </p>
+            </p>
         </div>
 
         <div className="stat-cards">

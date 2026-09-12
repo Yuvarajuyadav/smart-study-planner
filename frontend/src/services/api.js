@@ -1,161 +1,72 @@
 /**
- * Smart Study Planner — API Service
- * Works in 2 modes:
- *   1. WITH backend  → saves to MongoDB (set VITE_API_URL)
- *   2. WITHOUT backend → saves to browser localStorage (works on Vercel without any server)
+ * Smart Study Planner — Storage Service (localStorage only)
+ * No backend, no database, no server needed.
+ * All data is saved directly in the browser's localStorage.
  */
-
-const BASE = import.meta.env.VITE_API_URL || ''
 
 const SETUP_KEY     = 'smartStudyPlanner_setup'
 const SUBJECTS_KEY  = 'smartStudyPlanner_subjects'
 
-const hasBackend = () => BASE && BASE.startsWith('http')
-
-// ─── helpers ──────────────────────────────────────────────────────────────────
-async function apiFetch(method, path, body) {
-  const opts = { method, headers: { 'Content-Type': 'application/json' } }
-  if (body) opts.body = JSON.stringify(body)
-  const res  = await fetch(BASE + path, opts)
-  const data = await res.json()
-  if (!res.ok) throw { status: res.status, ...data }
-  return data
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function getLS(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback }
+  catch { return fallback }
+}
+function setLS(key, value) {
+  localStorage.setItem(key, JSON.stringify(value))
 }
 
+// ─── Setup / Student ──────────────────────────────────────────────────────────
 export function getLocalSetup() {
-  return JSON.parse(localStorage.getItem(SETUP_KEY) || 'null')
+  return getLS(SETUP_KEY, null)
 }
 
-// ─── Students ─────────────────────────────────────────────────────────────────
 export async function saveStudent(formData) {
-  if (!hasBackend()) {
-    // localStorage only mode
-    localStorage.setItem(SETUP_KEY, JSON.stringify(formData))
-    return { success: true, student: formData, source: 'local' }
-  }
-  try {
-    const setup   = getLocalSetup()
-    const payload = { ...formData }
-    if (setup?._id) payload._id = setup._id
-    const { student } = await apiFetch('POST', '/students', payload)
-    const merged = { ...formData, _id: student._id }
-    localStorage.setItem(SETUP_KEY, JSON.stringify(merged))
-    return { success: true, student: merged, source: 'api' }
-  } catch {
-    localStorage.setItem(SETUP_KEY, JSON.stringify(formData))
-    return { success: true, student: formData, source: 'local', warning: 'Saved locally (server unreachable)' }
-  }
+  setLS(SETUP_KEY, formData)
+  return { success: true, student: formData, source: 'local' }
 }
 
 // ─── Subjects ─────────────────────────────────────────────────────────────────
 export async function fetchSubjects() {
-  if (!hasBackend()) {
-    const subjects = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
-    return { subjects, source: 'local' }
-  }
-  const setup     = getLocalSetup()
-  const studentId = setup?._id
-  try {
-    const url = studentId ? `/subjects?studentId=${studentId}` : '/subjects'
-    const { subjects } = await apiFetch('GET', url)
-    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(subjects))
-    return { subjects, source: 'api' }
-  } catch {
-    const subjects = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
-    return { subjects, source: 'local' }
-  }
+  const subjects = getLS(SUBJECTS_KEY, [])
+  return { subjects, source: 'local' }
 }
 
 export async function addSubject(formData) {
-  if (!hasBackend()) {
-    const subject = {
-      ...formData,
-      _id: Date.now().toString(),
-      id:  Date.now().toString(),
-      createdAt: new Date().toISOString(),
-    }
-    const local = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
-    local.push(subject)
-    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(local))
-    return { success: true, subject, source: 'local' }
+  const subject = {
+    ...formData,
+    _id:       Date.now().toString(),
+    id:        Date.now().toString(),
+    createdAt: new Date().toISOString(),
   }
-  const setup     = getLocalSetup()
-  const studentId = setup?._id
-  const payload   = { ...formData }
-  if (studentId) payload.studentId = studentId
-  try {
-    const { subject } = await apiFetch('POST', '/subjects', payload)
-    const local = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
-    local.push(subject)
-    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(local))
-    return { success: true, subject, source: 'api' }
-  } catch {
-    const subject = { ...formData, _id: Date.now().toString(), id: Date.now().toString(), createdAt: new Date().toISOString() }
-    const local   = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
-    local.push(subject)
-    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(local))
-    return { success: true, subject, source: 'local' }
-  }
+  const subjects = getLS(SUBJECTS_KEY, [])
+  subjects.push(subject)
+  setLS(SUBJECTS_KEY, subjects)
+  return { success: true, subject, source: 'local' }
 }
 
 export async function updateSubject(id, formData) {
-  if (!hasBackend()) {
-    const local   = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
-    const updated = local.map(s => (s._id === id || s.id === id) ? { ...s, ...formData } : s)
-    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(updated))
-    return { success: true, subject: formData, source: 'local' }
-  }
-  try {
-    const { subject } = await apiFetch('PUT', `/subjects/${id}`, formData)
-    const local   = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
-    const updated = local.map(s => (s._id === id || s.id === id) ? { ...s, ...subject } : s)
-    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(updated))
-    return { success: true, subject, source: 'api' }
-  } catch {
-    const local   = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
-    const updated = local.map(s => (s._id === id || s.id === id) ? { ...s, ...formData } : s)
-    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(updated))
-    return { success: true, subject: formData, source: 'local' }
-  }
+  const subjects = getLS(SUBJECTS_KEY, [])
+  const updated  = subjects.map(s =>
+    (s._id === id || s.id === id) ? { ...s, ...formData, updatedAt: new Date().toISOString() } : s
+  )
+  setLS(SUBJECTS_KEY, updated)
+  return { success: true, subject: formData, source: 'local' }
 }
 
 export async function deleteSubject(id) {
-  if (!hasBackend()) {
-    const local   = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
-    const updated = local.filter(s => s._id !== id && s.id !== id)
-    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(updated))
-    return { success: true, source: 'local' }
-  }
-  try {
-    await apiFetch('DELETE', `/subjects/${id}`)
-    const local   = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
-    const updated = local.filter(s => s._id !== id && s.id !== id)
-    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(updated))
-    return { success: true, source: 'api' }
-  } catch {
-    const local   = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
-    const updated = local.filter(s => s._id !== id && s.id !== id)
-    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(updated))
-    return { success: true, source: 'local' }
-  }
+  const subjects = getLS(SUBJECTS_KEY, [])
+  const updated  = subjects.filter(s => s._id !== id && s.id !== id)
+  setLS(SUBJECTS_KEY, updated)
+  return { success: true, source: 'local' }
 }
 
+// ─── Plan (computed locally) ───────────────────────────────────────────────────
 export async function fetchPlan() {
-  if (!hasBackend()) return null   // caller uses local fallback
-  const setup     = getLocalSetup()
-  const studentId = setup?._id
-  try {
-    const url = studentId ? `/plan?studentId=${studentId}` : '/plan'
-    return await apiFetch('GET', url)
-  } catch { return null }
+  return null  // StudyPlan.jsx uses its own local algorithm
 }
 
+// ─── Dashboard (computed locally) ────────────────────────────────────────────
 export async function fetchDashboard() {
-  if (!hasBackend()) return null
-  const setup     = getLocalSetup()
-  const studentId = setup?._id
-  try {
-    const url = studentId ? `/dashboard?studentId=${studentId}` : '/dashboard'
-    return await apiFetch('GET', url)
-  } catch { return null }
+  return null  // Dashboard.jsx uses its own local calculation
 }

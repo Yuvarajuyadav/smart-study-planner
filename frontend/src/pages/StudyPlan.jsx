@@ -54,7 +54,6 @@ export default function StudyPlan() {
       const apiData = await fetchPlan()
 
       if (apiData && apiData.tasks) {
-        setSource('api')
         setSetup(getLocalSetup())
         if (apiData.tasks.length === 0) { setHasSubjects(false) } else {
           setTasks(apiData.tasks)
@@ -62,7 +61,6 @@ export default function StudyPlan() {
         }
       } else {
         // offline fallback
-        setSource('local')
         const localSetup    = JSON.parse(localStorage.getItem(SETUP_KEY) || 'null')
         const localSubjects = JSON.parse(localStorage.getItem(SUBJECTS_KEY) || '[]')
         setSetup(localSetup)
@@ -100,9 +98,7 @@ export default function StudyPlan() {
           <div>
             <h1 className="section-title">Today's Study Plan</h1>
             <div className="studyplan-date">📅 {today}
-              {source === 'api'   && <span style={{ marginLeft: 12, color: 'var(--success)',  fontSize: '.78rem', fontWeight: 600 }}>● Live</span>}
-              {source === 'local' && <span style={{ marginLeft: 12, color: 'var(--warning)', fontSize: '.78rem', fontWeight: 600 }}>● Offline</span>}
-            </div>
+              </div>
           </div>
           <button className="btn btn-outline btn-sm" onClick={() => navigate('/subjects')}>← Edit Subjects</button>
         </div>
